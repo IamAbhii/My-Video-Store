@@ -1,2 +1,3 @@
 ﻿-How to do custom routing for perticular action methods.
 -Learned how to do attribute routing with contraints.
+-Update Tables using Migrations with sql
