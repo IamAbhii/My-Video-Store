@@ -25,6 +25,7 @@ namespace MyMovieStore.Models
         public byte GenreId { get; set; }
         [Required]
         [Display(Name = "Number In Stock")]
+        [Range(1,20)]
         public int NumberInStock { get; set; }
     }
 }

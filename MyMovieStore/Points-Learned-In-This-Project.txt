@@ -1,3 +1,89 @@
-﻿-How to do custom routing for perticular action methods.
--Learned how to do attribute routing with contraints.
--Update Tables using Migrations with sql
+﻿Action Parameters Sources
+•Embedded in the URL: /movies/edit/1
+•In the query string: /movies/edit?id=1
+•In the form dataTypeHelper
+
+Convention-based Routes 
+•routes.MapRoute(                
+				“MoviesByReleaseDate”,                
+				“movies/released/{year}/{month}”,                
+				new    {                                        
+						controller    =    “Movies”,
+						action    =    “MoviesReleaseByDate” 
+						},                
+				new    {                                        
+						year    =    @“\d{4},    
+						month    =    @“\d{2}”                
+						}                
+					isFavorite    =    false;    
+				}    
+				
+Attribute Routes
+•[Route(“movies/released/{year}/{month}”)    
+•public ActionResult MoviesByReleaseDate(int year,int month)
+	{
+	}
+	To apply a constraint use a colon:
+	month:regex(\\d{2}):range(1,12)
+
+Seeding the Database 
+•Create a new empty migration and use the Sql method:  Sql(“INSERT    INTO    ...”) 
+				    
+				
+Overriding Conventions 
+•[Required]
+•[StringLength(255)]
+•public string Name { get; set; }    
+     
+Eager Loading  
+•_context.Movies.Include(m => m.Genre);
+
+Adding Validation Decorate properties of your model with data annotations. Then, in the controller:
+•if(!ModelState.IsValid)                
+	return    View(...);    
+	
+And in the view:
+•@Html.ValidationMessageFor(m => m.Name)    
+
+Styling Validation Errors In site.css:
+•.input-­‐validation-­‐error  
+	{               
+	color:    red;
+	}
+
+.field-­‐validation-­‐error    
+	{                
+	border:    2px    solid    red;
+	}    
+
+
+Custom Validation 
+•public    class    Min18IfAMember    :    ValidationAttribute
+{                    
+	protected override ValidationResult IsValid(object value,ValidationContext validationContext)
+	{                                        
+		...                                        
+		if    (valid)    
+			return  ValidationResult.Success;
+		else    
+			return new ValidationResult(“error    message”);
+	}
+}   
+
+Validation Summary 
+•@Html.ValidationSummary(true, “Please fix the following errors”);  
+
+Client-side Validation 
+•@section    scripts    
+	{                        
+	@Scripts.Render(“~/bundles/jqueryval”)
+	}
+	
+Anti-forgery Tokens In the view:
+•@Html.AntiForgeryToken()    
+
+In the controller:
+•[ValidateAntiForgeryToken]
+ public    ActionResult    Save()    
+	{    
+	}    
