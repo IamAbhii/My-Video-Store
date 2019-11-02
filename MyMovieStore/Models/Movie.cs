@@ -15,6 +15,7 @@ namespace MyMovieStore.Models
         public string Name { get; set; }
         [Required]
         [Display(Name="Release Date")]
+        [DataType(DataType.Date)]
         public DateTime ReleaseDate { get; set; }
         [Required]
         [Display(Name = "Date Added")]
