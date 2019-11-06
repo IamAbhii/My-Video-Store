@@ -1,4 +1,6 @@
-﻿using MyMovieStore.Models;
+﻿using AutoMapper;
+using MyMovieStore.DTO;
+using MyMovieStore.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,34 +19,38 @@ namespace MyMovieStore.API
             _context = new ApplicationDbContext();
         }
         //Get  /api/customers
-        public IEnumerable<Customer> GetCustomers()
+        public IEnumerable<CustomerDto> GetCustomers()
         {
-            return _context.Customers.ToList();
+            return _context.Customers.ToList().Select(Mapper.Map<Customer,CustomerDto>);
         }
 
-        //Get  /api/customer/1
-        public Customer GetCustomer(int id)
+        //Get  /api/customers/1
+        public IHttpActionResult GetCustomer(int id)
         {
             var customer = _context.Customers.SingleOrDefault(c => c.Id==id);
             if (customer == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            return customer;
+                return NotFound();
+            return Ok(Mapper.Map<Customer,CustomerDto>(customer));
         }
 
         //Post /api/customers
         [HttpPost]
-        public Customer CreateCustomer(Customer customer)
+        public IHttpActionResult CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
+            //here we are passing only source object "customerDto" we are not passing the targeted object
+            //so it will return the new object as customer
+            var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
-            return customer;
+            customerDto.Id = customer.Id;
+            return Created(new Uri(Request.RequestUri+"/"+customer.Id),customerDto);
         }
 
         //post /api/customers/1
-        public void UpdateCustomer(int id,Customer customer)
+        public void UpdateCustomer(int id,CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
@@ -54,12 +60,24 @@ namespace MyMovieStore.API
             if (customerInDb == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            customerInDb.Name = customer.Name;
-            customerInDb.Birthdate = customer.Birthdate;
-            customerInDb.IsSubscribedToNewsLetter = customer.IsSubscribedToNewsLetter;
-            customerInDb.MembershipTypeId = customer.MembershipTypeId;
+            //here mapper will return targeted object as customerInDb bcoz we alreay had object here so wee need to pass it
+            Mapper.Map(customerDto, customerInDb);
+            
 
             _context.SaveChanges();
+        }
+
+        // Delete /api/customer/1
+        [HttpDelete]
+        public void DeleteCustomer(int id)
+        {
+            var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
+            if (customerInDb == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            _context.Customers.Remove(customerInDb);
+            _context.SaveChanges();
+
         }
     }
 }
