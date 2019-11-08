@@ -19,9 +19,10 @@ namespace MyMovieStore.API
             _context = new ApplicationDbContext();
         }
         //Get  /api/customers
-        public IEnumerable<CustomerDto> GetCustomers()
+        public IHttpActionResult GetCustomers()
         {
-            return _context.Customers.ToList().Select(Mapper.Map<Customer,CustomerDto>);
+            var customerDto=_context.Customers.ToList().Select(Mapper.Map<Customer,CustomerDto>);
+            return Ok(customerDto);
         }
 
         //Get  /api/customers/1
@@ -39,6 +40,7 @@ namespace MyMovieStore.API
         {
             if (!ModelState.IsValid)
                 return BadRequest();
+
             //here we are passing only source object "customerDto" we are not passing the targeted object
             //so it will return the new object as customer
             var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
@@ -50,34 +52,35 @@ namespace MyMovieStore.API
         }
 
         //post /api/customers/1
-        public void UpdateCustomer(int id,CustomerDto customerDto)
+        [HttpPut]
+        public IHttpActionResult UpdateCustomer(int id,CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+                return BadRequest();
 
             var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
 
             if (customerInDb == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            //here mapper will return targeted object as customerInDb bcoz we alreay had object here so wee need to pass it
+                return NotFound();
+            //here mapper will return targeted object as customerInDb 
+            //bcoz we alreay had object here so wee need to pass it
             Mapper.Map(customerDto, customerInDb);
             
 
             _context.SaveChanges();
+            return Ok();
         }
 
-        // Delete /api/customer/1
+        // Delete /api/customers/1
         [HttpDelete]
-        public void DeleteCustomer(int id)
+        public IHttpActionResult DeleteCustomer(int id)
         {
             var customerInDb = _context.Customers.SingleOrDefault(c => c.Id == id);
             if (customerInDb == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
+                return NotFound();
             _context.Customers.Remove(customerInDb);
             _context.SaveChanges();
-
+            return Ok();
         }
     }
 }
