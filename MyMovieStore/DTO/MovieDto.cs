@@ -23,6 +23,7 @@ namespace MyMovieStore.DTO
         [Required]
         [Display(Name = "Genre")]
         public byte GenreId { get; set; }
+        public GenreDto genre { get ; set; }
         [Required]
         [Range(1, 20)]
         public int NumberInStock { get; set; }

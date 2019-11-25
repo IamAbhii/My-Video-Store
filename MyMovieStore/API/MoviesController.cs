@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using AutoMapper;
+using System.Data.Entity;
 
 namespace MyMovieStore.API
 {
@@ -22,7 +23,9 @@ namespace MyMovieStore.API
         //Get api/moives
         public IHttpActionResult GetMovies()
         {
-            var movieDto=_context.Movies.ToList().Select(Mapper.Map<Movie,MovieDto>);
+            var movieDto=_context.Movies.Include(m=>m.Genre)
+                                        .ToList()
+                                        .Select(Mapper.Map<Movie,MovieDto>);
             return Ok(movieDto);
         }
 

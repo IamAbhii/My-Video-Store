@@ -5,41 +5,50 @@
 }
 
 <h2>Customers</h2>
-@if (!Model.Any())
-{
-    <p>We don't have any customers yet.</p>
-}
-else
-{
-    <table id="customers" class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>Customer</th>
-                <th>Membership Type</th>
-                <th>Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var customer in Model)
-            {
-                <tr>
-                    <td>@Html.ActionLink(customer.Name,"Edit","Customers",new { id=customer.Id},null)</td>
-                    <td>@customer.MembershipType.Name</td>
-                    <td>
-                        <button data-customer-id="@customer.Id" class="btn-link js-delete">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+
+<table id="customers" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Membership Type</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
 @section scripts
 {
 <script>
     $(document).ready(function () {
 
-        $("#customers").DataTable();
+
+        var table=$("#customers").DataTable({
+            ajax: {
+                url: "/api/customers", // client side pagination ,this approach is good for up to 1000 customers but for-
+                                       //more than that we need to do sorting and everything at server side.
+                dataSrc: "",
+
+            },
+            columns: [
+                {
+                    data: "name",
+                    render: function (data,type,customer) {
+                        return "<a href='/customers/edit/" + customer.id + "'>" + customer.name + "</a>";
+                    }
+                },
+                {
+                    data:"membershipType.name"
+                },
+                {
+                    data: "id",
+                    render: function (data) {
+                        return"<button class='btn-link js-delete' data-customer-id="+data+">Delete</button>"
+                    }
+                }
+            ]
+        });
 
         $("#customers").on("click",".js-delete", function () {
 
@@ -64,9 +73,12 @@ else
                     url: "/api/customers/" + button.attr("data-customer-id"),
                     method: "DELETE",
                     success: function () {
+                        //table is here is reference to datatable, we need to delete the data from datatable internal list also,
+                        //after removing from database thats why we used table refernce.
                         //to remove the whole table raw we used button as refernce.
                         //traverse to tr tag and removed it.
-                        button.parents("tr").remove();
+                       
+                        table.row(button.parents("tr")).remove().draw();
                     }
                 })
             }
