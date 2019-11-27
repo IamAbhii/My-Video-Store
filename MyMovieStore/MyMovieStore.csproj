@@ -249,6 +249,10 @@
     <Compile Include="Migrations\201910160254378_ChangedMovieCLassPropertyName.Designer.cs">
       <DependentUpon>201910160254378_ChangedMovieCLassPropertyName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911270121063_SeedUsers.cs" />
+    <Compile Include="Migrations\201911270121063_SeedUsers.Designer.cs">
+      <DependentUpon>201911270121063_SeedUsers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -643,6 +647,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201910160254378_ChangedMovieCLassPropertyName.resx">
       <DependentUpon>201910160254378_ChangedMovieCLassPropertyName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911270121063_SeedUsers.resx">
+      <DependentUpon>201911270121063_SeedUsers.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
