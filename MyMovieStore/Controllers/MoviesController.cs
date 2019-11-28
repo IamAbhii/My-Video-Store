@@ -19,7 +19,18 @@ namespace MyMovieStore.Controllers
         {
             _context = new ApplicationDbContext();
         }
-
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+        public ViewResult Index()
+        {
+            if (User.IsInRole(RoleName.CanManageMovies))
+                return View("List");
+            else
+                return View("ReadOnlyList");
+        }
+        [Authorize(Roles =RoleName.CanManageMovies)]
         public ActionResult New()
         {
             var genres = _context.Genres.ToList();
@@ -82,10 +93,7 @@ namespace MyMovieStore.Controllers
 
             return View("MovieForm", viewModel);
         }
-        public ViewResult Index()
-        {
-            return View();
-        }
+
 
         public ActionResult Details(int Id)
         {

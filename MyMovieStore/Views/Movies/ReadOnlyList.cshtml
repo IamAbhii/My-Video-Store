@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MyMovieStore.Models.Movie>
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+
+<table id="movies" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Genre</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section scripts
+    {
+    <script>
+        $(document).ready(function () {
+            var table = $("#movies").DataTable({
+                ajax:
+                {
+                    url: "api/movies",// client side pagination ,this approach is good for up to 1000 movies but for-
+                    //more than that we need to do sorting and everything at server side.
+                    dataSrc: ""       // here if we want to target diffrent object ion recevied json then we have to assign
+                    // name of that obkject here
+                },
+                columns: [
+                    {
+                        data: "name",
+                    },
+                    {
+                        data: "genre.name"
+                    },
+
+                ]
+            });
+        });
+        </script>
+    }

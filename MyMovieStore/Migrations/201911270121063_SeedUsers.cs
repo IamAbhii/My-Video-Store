@@ -14,7 +14,6 @@ namespace MyMovieStore.Migrations
             INSERT INTO [dbo].[AspNetRoles] ([Id], [Name]) VALUES (N'3f660106-2249-48f4-815d-e81db3f956dd', N'CanManageMovies')
             
             INSERT INTO [dbo].[AspNetUserRoles] ([UserId], [RoleId]) VALUES (N'b3477053-5c91-4ef3-87ac-c24dcf105eaf', N'3f660106-2249-48f4-815d-e81db3f956dd')
-
             ");
         }
         
