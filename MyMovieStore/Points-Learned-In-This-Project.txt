@@ -87,3 +87,9 @@ In the controller:
  public    ActionResult    Save()    
 	{    
 	}    
+
+	-glimpse for perfomance meauserment
+	-data caching
+	-dissabling the session
+	-release build
+	-client tier optimization by bundling jsscript and css
