@@ -90,6 +90,7 @@ In the controller:
 
 	-glimpse for perfomance meauserment
 	-data caching
-	-dissabling the session
+	-dissabling the session(kills the scalability)
 	-release build
 	-client tier optimization by bundling jsscript and css
+	-type ahead library 
