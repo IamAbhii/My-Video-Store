@@ -94,3 +94,4 @@ In the controller:
 	-release build
 	-client tier optimization by bundling jsscript and css
 	-type ahead library 
+	-Elmah library to log unhandled exception.
