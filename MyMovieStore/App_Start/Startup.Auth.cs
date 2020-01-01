@@ -6,6 +6,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Owin;
 using MyMovieStore.Models;
+using System.Configuration;
 
 namespace MyMovieStore
 {
@@ -55,8 +56,8 @@ namespace MyMovieStore
             //   consumerSecret: "");
 
             app.UseFacebookAuthentication(
-               appId: "969738046729755",
-               appSecret: "16a26d15587c6675e6285bd809336419");
+               appId: ConfigurationManager.AppSettings["FacebookAppId"],
+               appSecret: ConfigurationManager.AppSettings["FacebookAppSecret"]);
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
