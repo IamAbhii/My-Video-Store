@@ -76,10 +76,15 @@ namespace MyMovieStore.Controllers
         {
             _context.Dispose();
         }
+
+        [AllowAnonymous]
         // GET: Customers
         public ViewResult Index()
         {
-            return View();
+            if (User.IsInRole(RoleName.CanManageCustomers))
+                return View("Index");
+            else
+                return View("ReadOnlyList");
         }
 
         public ActionResult Details(int id)

@@ -23,6 +23,8 @@ namespace MyMovieStore.Controllers
         {
             _context.Dispose();
         }
+
+        [AllowAnonymous]
         public ViewResult Index()
         {
             if (User.IsInRole(RoleName.CanManageMovies))
